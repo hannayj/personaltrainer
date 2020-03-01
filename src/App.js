@@ -19,8 +19,6 @@ function App() {
           </Switch>
         </div>
       </BrowserRouter>
-
-      <Customerlist />
     </div>
   );
 }
