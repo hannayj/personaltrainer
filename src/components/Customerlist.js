@@ -15,18 +15,58 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+
 export default function Customerlist() {
     const [customers, setCustomers] = useState([]);
 
-    useEffect(() => fectchData(), []);
+    useEffect(() => fetchData(), []);
 
-    const fectchData = () => {
+    const fetchData = () => {
         fetch('https://customerrest.herokuapp.com/api/customers')
         .then (response => response.json())
         .then (data => {
             setCustomers(data.content);
         })
     }
+    
+    const deleteCustomer = (link) => {
+        //console.log(link)
+        fetch (link, {method: 'DELETE'})
+        .then (response => fetchData())
+        .catch (err => {
+           console.error(err)
+        })
+    }
+
+    const saveCustomer = (customer) => {
+      //console.log(customer);
+      fetch('https://customerrest.herokuapp.com/api/customers', {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json'
+          },
+        body: JSON.stringify(customer)
+      })
+      .then(response => fetchData())
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  const editCustomer = (customer, link) => {
+    //console.log(link);
+    fetch(link, {            
+      method: 'PUT', 
+      headers: {
+        'Content-Type': 'application/json'
+        },
+      body: JSON.stringify(customer)   
+    })
+    .then(response => fetchData())
+    .catch(err => {
+        console.error(err)
+    })
+}
 
     const columns = [
         {
@@ -37,7 +77,7 @@ export default function Customerlist() {
             title: 'Last name',
             field: 'lastname'
         },
-                {
+        {
             title: 'Street address',
             field: 'streetaddress'
         },
@@ -56,6 +96,11 @@ export default function Customerlist() {
         {
             title: 'Phone',
             field: 'phone'
+        },
+        {
+            title: 'id',
+            field: 'links.0.href',
+            hidden: true
         },
     ]
 
@@ -87,6 +132,32 @@ export default function Customerlist() {
                 data={customers}
                 options={{sorting: true, pageSize: 10}}
                 icons={tableIcons}
+                editable={{
+                    onRowAdd: customer =>
+                      new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            //console.log(customer);
+                            saveCustomer(customer);
+                          resolve()
+                        }, 1000)
+                      }),
+                    onRowUpdate: customers =>
+                      new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            //console.log(customers);
+                            editCustomer(customers, customers.links[0].href);
+                          resolve()
+                        }, 1000)
+                      }),
+                    onRowDelete: customers =>
+                      new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                          //console.log(customers.links[0].href);
+                          deleteCustomer(customers.links[0].href);
+                          resolve()
+                        }, 1000)
+                      }),
+                  }}
             />
         </div>
     );
