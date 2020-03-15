@@ -20,9 +20,9 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 export default function Traininglist() {
     const [trainings, setTrainings] = useState([]);
 
-    useEffect(() => fectchData(), []);
+    useEffect(() => fetchData(), []);
 
-    const fectchData = () => {
+    const fetchData = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
         .then (response => response.json())
         .then (data => {
@@ -30,11 +30,21 @@ export default function Traininglist() {
         })
     }
 
+    const deleteTraining = (id) => {
+      console.log(id);
+      fetch ('https://customerrest.herokuapp.com/api/trainings/' + id, {method: 'DELETE'})
+      .then (response => fetchData())
+      .catch (err => {
+        console.error(err)
+      })
+    }
+
     const columns = [
         {
             id: 'formattedDate',
             title: 'Date',
             field: 'date',
+            type: 'datetime',
             render: rowData => {
                 return Moment(rowData.date)
                 .local()
@@ -53,7 +63,11 @@ export default function Traininglist() {
             id: 'CustomerName',
             title: 'Customer',
             render: rowData => rowData.customer.firstname + ' ' + rowData.customer.lastname,
-            customFilterAndSearch: (term, rowData) => (rowData.customer.firstname + ' ' + rowData.customer.lastname).indexOf(term) !== -1
+            customFilterAndSearch: (term, rowData) => (rowData.customer.firstname + ' ' + rowData.customer.lastname).indexOf(term) !== -1,
+        },
+        {
+          field: 'id',
+          hidden: true
         },
 
     ]
@@ -86,6 +100,16 @@ export default function Traininglist() {
                 data={trainings}
                 options={{sorting: true, pageSize: 10}}
                 icons={tableIcons}
+                editable={{
+                    onRowDelete: training =>
+                      new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                          console.log(training.id);
+                          deleteTraining(training.id);
+                          resolve()
+                        }, 1000)
+                      }),
+                  }}
             />
         </div>
     );

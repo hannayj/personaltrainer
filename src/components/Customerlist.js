@@ -15,6 +15,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Addtraining from './Addtraining';
+//import Moment from 'moment';
 
 export default function Customerlist() {
     const [customers, setCustomers] = useState([]);
@@ -68,7 +70,30 @@ export default function Customerlist() {
     })
 }
 
+const addTraining = (training) => {
+  console.log(training)
+  fetch('https://customerrest.herokuapp.com/api/trainings', {
+      method: 'POST', 
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: {
+         "date": training.date,
+         "activity": training.activity,
+         "duration": training.duration,
+         "customer": training.customer
+      }
+    })
+    .then(response => fetchData())
+    .catch(err => {
+      console.error(err)
+    })
+}
+
     const columns = [
+        {
+            render: rowData => <Addtraining addTraining={addTraining} customer={rowData.links[0].href}/>
+        },
         {
             title: 'First name',
             field: 'firstname'
