@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 export default function Addtraining(props) {
     const [open, setOpen] = useState(false);
     const [training, setTraining] = useState({
-        date: new Date(), activity:'', duration: '', customer: props.customer,
+        date: '', activity:'', duration: '', customer: props.customer,
     });
 
     const handleClickOpen = () => {
@@ -25,7 +25,7 @@ export default function Addtraining(props) {
     };
 
     const addTraining = () => {
-        console.log(props);
+        //console.log(props);
         props.addTraining(training);
         handleClose();
     }
