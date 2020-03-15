@@ -13,6 +13,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SportsIcon from '@material-ui/icons/Sports';
+import EventIcon from '@material-ui/icons/Event';
+
+
 
 
 
@@ -51,16 +54,22 @@ export default function Navigation(){
         >
             <List component="nav" aria-label="main mailbox folders">
                 <ListItem button component={Link} to='/'>
-                <ListItemIcon>
-                    <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Customers" />
+                    <ListItemIcon>
+                        <AccountCircleIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Customers" />
                 </ListItem>
                 <ListItem button component={Link} to='/trainings'>
-                <ListItemIcon>
-                    <SportsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Trainings" />
+                    <ListItemIcon>
+                        <SportsIcon />
+                    </ListItemIcon>
+                    </ListItem>
+                    <ListItemText primary="Trainings" />
+                <ListItem button component={Link} to='/calendar'>
+                    <ListItemIcon>
+                        <EventIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Calendar" />
                 </ListItem>
             </List>
 
