@@ -40,30 +40,32 @@ export default function Traininglist() {
     }
 
     const columns = [
-        {
-            id: 'formattedDate',
-            title: 'Date',
-            field: 'date',
-            type: 'datetime',
-            render: rowData => {
-                return Moment(rowData.date)
-                .local()
-                .format('D.M.YYYY H:mm')
-            }
+      {
+        title: 'Activity',
+        field: 'activity'
+      },  
+      {
+          id: 'formattedDate',
+          title: 'Date',
+          field: 'date',
+          type: 'datetime',
+          render: rowData => {
+            return Moment(rowData.date)
+            .local()
+            .format('D.M.YYYY H:mm a')
+        }
         },
         {
-            title: 'Duration',
-            field: 'duration'
+          title: 'Duration (min)',
+          field: 'duration',
+          //type: 'numeric',
         },
+
         {
-            title: 'Activity',
-            field: 'activity'
-        },
-        {
-            id: 'CustomerName',
-            title: 'Customer',
-            //render: rowData => rowData.customer.firstname + ' ' + rowData.customer.lastname,
-            //customFilterAndSearch: (term, rowData) => (rowData.customer.firstname + ' ' + rowData.customer.lastname).indexOf(term) !== -1,
+          id: 'CustomerName',
+          title: 'Customer',
+          render: rowData => rowData.customer.firstname + ' ' + rowData.customer.lastname,
+          customFilterAndSearch: (term, rowData) => (rowData.customer.firstname + ' ' + rowData.customer.lastname).indexOf(term) !== -1,
         },
         {
           field: 'id',
