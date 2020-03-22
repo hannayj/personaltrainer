@@ -62,8 +62,8 @@ export default function Traininglist() {
         {
             id: 'CustomerName',
             title: 'Customer',
-            render: rowData => rowData.customer.firstname + ' ' + rowData.customer.lastname,
-            customFilterAndSearch: (term, rowData) => (rowData.customer.firstname + ' ' + rowData.customer.lastname).indexOf(term) !== -1,
+            //render: rowData => rowData.customer.firstname + ' ' + rowData.customer.lastname,
+            //customFilterAndSearch: (term, rowData) => (rowData.customer.firstname + ' ' + rowData.customer.lastname).indexOf(term) !== -1,
         },
         {
           field: 'id',

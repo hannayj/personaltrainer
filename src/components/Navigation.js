@@ -63,8 +63,8 @@ export default function Navigation(){
                     <ListItemIcon>
                         <SportsIcon />
                     </ListItemIcon>
-                    </ListItem>
                     <ListItemText primary="Trainings" />
+                </ListItem>
                 <ListItem button component={Link} to='/calendar'>
                     <ListItemIcon>
                         <EventIcon />
