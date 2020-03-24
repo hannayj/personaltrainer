@@ -86,7 +86,9 @@ export default function Customerlist() {
 
   const columns = [
     {
-      render: rowData => <Addtraining addTraining={addTraining} customer={rowData.links[0].href}/>,
+      editable: 'never',
+      field: 'links[0].href',
+      render: rowData => <Addtraining addTraining={addTraining} customer={rowData}/>,
     },
     {
       title: 'First name',
@@ -118,8 +120,8 @@ export default function Customerlist() {
     },
     {
       title: 'id',
-      field: 'links.0.href',
-      hidden: true
+      field: 'links[0].href',
+      //hidden: true
     },
   ]
 

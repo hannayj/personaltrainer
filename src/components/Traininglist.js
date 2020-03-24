@@ -71,7 +71,8 @@ export default function Traininglist() {
           field: 'id',
           hidden: true
         },
-
+    ]
+    
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
