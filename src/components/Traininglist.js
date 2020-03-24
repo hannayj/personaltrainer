@@ -18,26 +18,26 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
 export default function Traininglist() {
-    const [trainings, setTrainings] = useState([]);
+  const [trainings, setTrainings] = useState([]);
 
-    useEffect(() => fetchData(), []);
+  useEffect(() => fetchData(), []);
 
-    const fetchData = () => {
-        fetch('https://customerrest.herokuapp.com/gettrainings')
-        .then (response => response.json())
-        .then (data => {
-            setTrainings(data);
-        })
-    }
+  const fetchData = () => {
+    fetch('https://customerrest.herokuapp.com/gettrainings')
+    .then (response => response.json())
+    .then (data => {
+      setTrainings(data);
+    })
+  }
 
-    const deleteTraining = (id) => {
-      console.log(id);
-      fetch ('https://customerrest.herokuapp.com/api/trainings/' + id, {method: 'DELETE'})
-      .then (response => fetchData())
-      .catch (err => {
-        console.error(err)
-      })
-    }
+  const deleteTraining = (id) => {
+    console.log(id);
+    fetch ('https://customerrest.herokuapp.com/api/trainings/' + id, {method: 'DELETE'})
+    .then (response => fetchData())
+    .catch (err => {
+      console.error(err)
+    })
+  }
 
     const columns = [
       {
@@ -72,47 +72,45 @@ export default function Traininglist() {
           hidden: true
         },
 
-    ]
+  const tableIcons = {
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  };
 
-    const tableIcons = {
-        Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-        Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-        Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-        Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-        DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-        Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-        Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-        Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-        FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-        LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-        NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-        PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-        ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-        Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-        SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-        ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-        ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-      };
-
-    return(
-        <div>
-            <MaterialTable
-                title="Trainings"
-                columns={columns}
-                data={trainings}
-                options={{sorting: true, pageSize: 10}}
-                icons={tableIcons}
-                editable={{
-                    onRowDelete: training =>
-                      new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                          console.log(training.id);
-                          deleteTraining(training.id);
-                          resolve()
-                        }, 1000)
-                      }),
-                  }}
-            />
-        </div>
-    );
+  return(
+    <div>
+      <MaterialTable
+        title="Trainings"
+        columns={columns}
+        data={trainings}
+        options={{sorting: true, pageSize: 10}}
+        icons={tableIcons}
+        editable={{
+          onRowDelete: training =>
+            new Promise((resolve, reject) => {
+              setTimeout(() => {
+                //console.log(training.id);
+                deleteTraining(training.id);
+                resolve()
+              }, 1000)
+            }),
+        }}
+      />
+    </div>
+  );
 }
