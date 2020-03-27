@@ -16,9 +16,31 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Addtraining from './Addtraining';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  const useStyles = makeStyles(theme => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+  }));
 
 export default function Customerlist() {
   const [customers, setCustomers] = useState([]);
+  const [success, setSuccess] = useState({open: false, message: ''});
+  const classes = useStyles();
+
+  const handleClose = () => {
+    setSuccess(false);
+   };
 
   useEffect(() => fetchData(), []);
 
@@ -33,7 +55,10 @@ export default function Customerlist() {
   const deleteCustomer = (link) => {
       //console.log(link)
       fetch (link, {method: 'DELETE'})
-      .then (response => fetchData())
+      .then (response => {
+        setSuccess({open: true, message: 'Customer deleted'});
+        fetchData();
+      })
       .catch (err => {
         console.error(err)
       })
@@ -48,7 +73,10 @@ export default function Customerlist() {
         },
       body: JSON.stringify(customer)
     })
-    .then(response => fetchData())
+    .then(response => {
+      setSuccess({open: true, message: 'New customer added'});
+      fetchData();
+    })
     .catch(err => {
       console.error(err)
     })
@@ -63,7 +91,10 @@ export default function Customerlist() {
         },
       body: JSON.stringify(customer)   
     })
-    .then(response => fetchData())
+    .then(response => {
+      setSuccess({open: true, message: 'Customer edited'});
+      fetchData();
+    })
     .catch(err => {
       console.error(err)
     })
@@ -121,7 +152,7 @@ export default function Customerlist() {
     {
       title: 'id',
       field: 'links[0].href',
-      //hidden: true
+      hidden: true
     },
   ]
 
@@ -146,7 +177,7 @@ export default function Customerlist() {
   };
 
   return(
-    <div>
+    <div className={classes.root}>
       <MaterialTable
         title="Customers"
         columns={columns}
@@ -180,6 +211,11 @@ export default function Customerlist() {
             }),
           }}
       />
+      <Snackbar open={success} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          {success.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

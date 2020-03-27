@@ -98,7 +98,7 @@ export default function Addtraining(props) {
             </Dialog>
             <Snackbar open={openSuccess} autoHideDuration={3000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
-                Added training for {props.customer.firstname} {props.customer.lastname}
+                    New training added.
                 </Alert>
             </Snackbar>
         </div>
