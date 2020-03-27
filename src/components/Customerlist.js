@@ -18,25 +18,14 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import Addtraining from './Addtraining';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
-  const useStyles = makeStyles(theme => ({
-    root: {
-      width: '100%',
-      '& > * + *': {
-        marginTop: theme.spacing(2),
-      },
-    },
-  }));
-
 export default function Customerlist() {
   const [customers, setCustomers] = useState([]);
   const [success, setSuccess] = useState({open: false, message: ''});
-  const classes = useStyles();
 
   const handleClose = () => {
     setSuccess(false);
@@ -47,9 +36,8 @@ export default function Customerlist() {
   const fetchData = () => {
       fetch('https://customerrest.herokuapp.com/api/customers')
       .then (response => response.json())
-      .then (data => {
-          setCustomers(data.content);
-      })
+      .then (data => setCustomers(data.content)
+      )
   }
     
   const deleteCustomer = (link) => {
@@ -177,7 +165,7 @@ export default function Customerlist() {
   };
 
   return(
-    <div className={classes.root}>
+    <div>
       <MaterialTable
         title="Customers"
         columns={columns}
@@ -211,7 +199,7 @@ export default function Customerlist() {
             }),
           }}
       />
-      <Snackbar open={success} autoHideDuration={3000} onClose={handleClose}>
+      <Snackbar open={success.open} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
           {success.message}
         </Alert>

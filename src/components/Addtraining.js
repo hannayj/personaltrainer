@@ -7,25 +7,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
-  const useStyles = makeStyles(theme => ({
-    root: {
-      width: '100%',
-      '& > * + *': {
-        marginTop: theme.spacing(2),
-      },
-    },
-  }));
-
 export default function Addtraining(props) {
-    const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const [openSuccess, setOpenSuccess] = useState(false);
+    const [success, setSuccess] = useState({open: false, message: ''});
     const [training, setTraining] = useState({
         date: '', activity:'', duration: '', customer: '',
     });
@@ -37,7 +26,7 @@ export default function Addtraining(props) {
 
     const handleClose = () => {
         setOpen(false);
-        setOpenSuccess(false);
+        setSuccess(false);
     };
 
     const handleInputChange = (event) => {
@@ -49,11 +38,11 @@ export default function Addtraining(props) {
         const trainingWithCustomer = {...training, customer: props.customer.links[0].href}
         props.addTraining(trainingWithCustomer);
         handleClose();
-        setOpenSuccess(true);
+        setSuccess({open: true, message: 'New training added for ' + props.customer.firstname + ' ' + props.customer.lastname});
     }
 
     return(
-        <div className={classes.root}>
+        <div>
             <Button style={{margin: 10}} variant="outlined" color="primary" onClick={handleClickOpen}>
                 Add training
             </Button>
@@ -96,9 +85,9 @@ export default function Addtraining(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={openSuccess} autoHideDuration={3000} onClose={handleClose}>
+            <Snackbar open={success.open} autoHideDuration={3000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
-                    New training added.
+                    {success.message}
                 </Alert>
             </Snackbar>
         </div>
