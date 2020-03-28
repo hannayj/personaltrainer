@@ -27,8 +27,7 @@ export default function Trainingcalendar(props){
             <Calendar
                 localizer={localizer}
                 events={events}
-                onSelectEvent={event => alert(event.title + ' ' + moment(event.start).format('D.M.YYYY H:mm A') + '-' + moment(event.end).format('H:mm A'))}
-                defaultView='week'
+                onSelectEvent={event => alert(event.title + ' ' + moment(event.start).format('D.M.YYYY h:mm A') + '-' + moment(event.end).format('h:mm A'))}
                 style={{ height: 700 }}
             />
         </div>

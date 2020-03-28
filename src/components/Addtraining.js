@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -18,6 +20,7 @@ export default function Addtraining(props) {
     const [training, setTraining] = useState({
         date: '', activity:'', duration: '', customer: '',
     });
+    const [date, setDate] = useState(new Date());
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -28,15 +31,16 @@ export default function Addtraining(props) {
         setOpen(false);
         setSuccess(false);
     };
-
+    
     const handleInputChange = (event) => {
         setTraining({...training, [event.target.name]: event.target.value})
     };
 
     const addTraining = () => {
-        //console.log(props);
-        const trainingWithCustomer = {...training, customer: props.customer.links[0].href}
-        props.addTraining(trainingWithCustomer);
+        const dateFormatted = date.format();
+        const wholeTraining = {...training, date: dateFormatted, customer: props.customer.links[0].href}
+        //console.log(wholeTraining)
+        props.addTraining(wholeTraining);
         handleClose();
         setSuccess({open: true, message: 'New training added for ' + props.customer.firstname + ' ' + props.customer.lastname});
     }
@@ -49,16 +53,17 @@ export default function Addtraining(props) {
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">New training</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <DateTimePicker
+                        label="DateTimePicker"
                         name="date"
-                        value={training.date}
-                        onChange={e => handleInputChange(e)}
-                        label="Date"
-                        type="datetime-local"
-                        fullWidth
+                        inputVariant="outlined"
+                        value={date}
+                        onChange={setDate}
+                        
                     />
+                </MuiPickersUtilsProvider>
+
                     <TextField
                         margin="dense"
                         name="activity"
