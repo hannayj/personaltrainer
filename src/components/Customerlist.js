@@ -97,7 +97,10 @@ export default function Customerlist() {
       },
       body: JSON.stringify(training) 
     })
-    .then(response => fetchData())
+    .then(response => {
+      setSuccess({open: true, message: 'New training added.'});  
+      fetchData()
+    })
     .catch(err => {
       console.error(err)
     })

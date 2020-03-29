@@ -5,22 +5,19 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
-
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
+import validator from 'validator';
 
 export default function Addtraining(props) {
     const [open, setOpen] = useState(false);
-    const [success, setSuccess] = useState({open: false, message: ''});
     const [training, setTraining] = useState({
         date: '', activity:'', duration: '', customer: '',
     });
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(null);
+    const [dateError, setDateError] = useState(false);
+    const [activityError, setActivityError] = useState(false);
+    const [durationError, setDurationError] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -29,7 +26,6 @@ export default function Addtraining(props) {
 
     const handleClose = () => {
         setOpen(false);
-        setSuccess(false);
     };
     
     const handleInputChange = (event) => {
@@ -37,12 +33,22 @@ export default function Addtraining(props) {
     };
 
     const addTraining = () => {
+        console.log(date)
+        if (date === null){
+            setDateError(true);
+        } else if (training.activity === '') {
+            setActivityError(true);
+        } else {
         const dateFormatted = date.format();
         const wholeTraining = {...training, date: dateFormatted, customer: props.customer.links[0].href}
         //console.log(wholeTraining)
-        props.addTraining(wholeTraining);
-        handleClose();
-        setSuccess({open: true, message: 'New training added for ' + props.customer.firstname + ' ' + props.customer.lastname});
+        if(validator.isInt(training.duration,{ min: 15, max: 120 })){
+            props.addTraining(wholeTraining);
+            handleClose();
+        } else {
+            setDurationError(true);
+        }
+    }
     }
 
     return(
@@ -55,15 +61,14 @@ export default function Addtraining(props) {
                 <DialogContent>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
                     <DateTimePicker
-                        label="DateTimePicker"
+                        label="Date and time"
                         name="date"
-                        inputVariant="outlined"
                         value={date}
                         onChange={setDate}
-                        
+                        error={dateError}
+                        helperText={dateError ? 'Please give date and time of training':''}
                     />
                 </MuiPickersUtilsProvider>
-
                     <TextField
                         margin="dense"
                         name="activity"
@@ -71,14 +76,18 @@ export default function Addtraining(props) {
                         onChange={e => handleInputChange(e)}
                         label="Activity"
                         fullWidth
+                        error={activityError}
+                        helperText={activityError ? 'Please give the name of the activity':''}
                     />
                     <TextField
                         margin="dense"
                         name="duration"
                         value={training.duration}
                         onChange={e => handleInputChange(e)}
-                        label="Duration"
+                        label="Duration (min)"
                         fullWidth
+                        error={durationError}
+                        helperText={durationError ? 'Duration needs to be a number between 15-120.':''}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -90,11 +99,6 @@ export default function Addtraining(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={success.open} autoHideDuration={3000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success">
-                    {success.message}
-                </Alert>
-            </Snackbar>
         </div>
     );
 }

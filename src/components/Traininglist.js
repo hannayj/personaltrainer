@@ -16,9 +16,16 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function Traininglist() {
   const [trainings, setTrainings] = useState([]);
+  const [success, setSuccess] = useState({open: false, message: ''});
 
   useEffect(() => fetchData(), []);
 
@@ -30,10 +37,17 @@ export default function Traininglist() {
     })
   }
 
+  const handleClose = () => {
+    setSuccess(false);
+  };
+
   const deleteTraining = (id) => {
     console.log(id);
     fetch ('https://customerrest.herokuapp.com/api/trainings/' + id, {method: 'DELETE'})
-    .then (response => fetchData())
+    .then (response => {
+      setSuccess({open: true, message: 'Training deleted'});
+      fetchData();
+    })
     .catch (err => {
       console.error(err)
     })
@@ -58,7 +72,6 @@ export default function Traininglist() {
         {
           title: 'Duration (min)',
           field: 'duration',
-          //type: 'numeric',
         },
 
         {
@@ -112,6 +125,11 @@ export default function Traininglist() {
             }),
         }}
       />
+      <Snackbar open={success.open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          {success.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
